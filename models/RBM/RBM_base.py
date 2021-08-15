@@ -1,9 +1,9 @@
 import numpy as np
-from tqdm import tqdm
+from tqdm import tqdm, trange
 from scipy.special import expit
 
 class RBM_Model:
-	def __init__(self, n_visible, n_hidden, lr=0.001, optim='adam', k=5, batch_size=32, epochs=100):
+	def __init__(self, n_visible, n_hidden, lr=0.001, optim='adam', k=5, batch_size=32, epochs=10):
 		self.n_hidden = n_hidden
 		self.n_visible = n_visible
 		self.lr = lr
@@ -81,13 +81,21 @@ class RBM_Model:
 			bar.set_description(str({'epoch': epoch+1, 'loss': round(train_loss/(batch_idx+1), 4)}))
 			bar.refresh()
 		bar.close()
-		return train_loss
+		return train_loss/(batch_idx+1)
 
-	def train(self, x):
+	def train(self, x, disable_internal=False, disable_external=True, return_loss=False, part_of_dbn=False):
 		x = x.astype(np.float32)
-		x = (x - np.min(x))/(np.max(x) - np.min(x) + self.epsilon)
+		if not part_of_dbn:
+			x = (x - np.min(x))/(np.max(x) - np.min(x) + self.epsilon)
 		x = [x[index*self.batch_size:(index+1)*self.batch_size] for index in range(len(x)//self.batch_size)]
-		for epoch in range(self.epochs):
-			mae = self.single_epoch(x, epoch, disable=False)
+		bar = trange(self.epochs, disable=disable_external)
+		for epoch in bar:
+			mae = self.single_epoch(x, epoch, disable=disable_internal)
+			bar.set_description(str({'epoch': epoch+1, 'loss': round(mae, 4)}))
+			bar.refresh()
+		bar.close()
 		model = {'W': self.W, 'hb': self.hb, 'vb': self.vb}
-		return model
+		if return_loss:
+			return model, mae
+		else:
+			return model

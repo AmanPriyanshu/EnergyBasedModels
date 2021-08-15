@@ -50,7 +50,7 @@ class Pre_trainer:
 			v0 = batch_x
 			vk = batch_x
 			ph0, h0 = self.sample_h(v0)
-			v_array, h_array = [v0], [h0]
+			v_array, h_array = [], []
 			for k in range(self.k):
 				_, hk = self.sample_h(vk)
 				_, vk = self.sample_v(hk)
