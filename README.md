@@ -18,3 +18,8 @@ This repository aims to provide streamlined code for fast implementation require
 
 To be filled
 
+# Contributing
+
+When contributing to this repository, please first discuss the change you wish to make via issue,
+email, or any other method with the owners of this repository before making a change. We also make
+available a [CONTRIBUTING.md](/CONTRIBUTING.md) and [CODE_OF_CONDUCT.md](/CODE_OF_CONDUCT.md) for easy communication and quick issue resolution.
