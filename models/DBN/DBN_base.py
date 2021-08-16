@@ -27,11 +27,7 @@ class DBN_Model:
 		hidden_features = x
 		for model in self.model_array:
 			for idx, batch_x in enumerate([hidden_features[index*self.batch_size:(index+1)*self.batch_size] for index in range(len(hidden_features)//self.batch_size)]):
-				features = []
-				for _ in range(self.k):
-					_, v = self.sample_h(batch_x, model)
-					features.append(v)
-				features = np.mean(np.stack(features), 0)
+				features, _ = self.sample_h(batch_x, model)
 				if idx==0:
 					hidden_features = features
 				else:

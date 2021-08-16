@@ -43,5 +43,5 @@ def DBN_classification_example(labels, images):
 
 if __name__ == '__main__':
 	data = get_data("./data/train.csv")
-	DBN_classification_example(data['labels'], data['images'])
-	#DBN_synthetic_generation_example(data['labels'], data['images'])
+	#DBN_classification_example(data['labels'], data['images'])
+	DBN_synthetic_generation_example(data['labels'], data['images'])
