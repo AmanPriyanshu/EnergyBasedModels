@@ -5,14 +5,15 @@ from models.DBN.DBN_classifier import Pre_trainer as Pre_trainer_classifier
 from models.DBN.DBN_synthetic_generator import Pre_trainer as Pre_trainer_synthetic_generator
 from matplotlib import pyplot as plt
 import numpy as np
+from sys import getsizeof
 
 def DBN_synthetic_generation_example(labels, images):
 	images_reshaped = images.reshape((len(images), -1))
-	dbn = Pre_trainer_synthetic_generator(n_visible=784, hidden_array=[400, 256, 100], epochs=15, optim='adm')
+	dbn = Pre_trainer_synthetic_generator(n_visible=784, hidden_array=[400, 256, 100, 49, 10], epochs=15, optim='adm')
 	dbn.train_dbn(images_reshaped)
 	synthetic_images, hidden_features = dbn.get_synthetic_data(images_reshaped)
 	synthetic_images = np.reshape(synthetic_images, (-1, 28, 28))
-	hidden_features = np.reshape(hidden_features, (-1, 10, 10))
+	hidden_features = np.reshape(hidden_features, (-1, 5, 2))
 	plt.cla()
 	fig = plt.figure(figsize = (15,60))
 	for digit in range(10):
@@ -31,7 +32,7 @@ def DBN_synthetic_generation_example(labels, images):
 
 def DBN_classification_example(labels, images):
 	images_reshaped = images.reshape((len(images), -1))
-	dbn = Pre_trainer_classifier(n_visible=784, hidden_array=[400, 256, 100, 49], n_classes=10, epochs=15, optim='adam')
+	dbn = Pre_trainer_classifier(n_visible=784, hidden_array=[400, 256, 100, 49], n_classes=10, epochs=15, optim='adm')
 	dbn.train_dbn(images_reshaped)
 	print("------Without Pre Training------")
 	model = dbn.get_torch_model()
@@ -42,5 +43,5 @@ def DBN_classification_example(labels, images):
 
 if __name__ == '__main__':
 	data = get_data("./data/train.csv")
-	#DBN_classification_example(data['labels'], data['images'])
-	DBN_synthetic_generation_example(data['labels'], data['images'])
+	DBN_classification_example(data['labels'], data['images'])
+	#DBN_synthetic_generation_example(data['labels'], data['images'])
